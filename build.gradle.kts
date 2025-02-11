@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.4.3-SNAPSHOT"
     id("io.spring.dependency-management") version "1.1.7"
     id("com.netflix.dgs.codegen") version "7.0.3"
+    id("org.jetbrains.kotlin.plugin.jpa") version "2.1.10"
 }
 
 group = "min.young.kim"
@@ -26,6 +27,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -36,6 +38,7 @@ dependencies {
     testImplementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("com.h2database:h2:2.3.232")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -52,7 +55,7 @@ kotlin {
 }
 
 tasks.generateJava {
-    schemaPaths.add("${projectDir}/src/main/resources/graphql-client")
+    schemaPaths.add("${projectDir}/src/main/resources/schema")
     packageName = "min.young.kim"
     generateClient = true
 }

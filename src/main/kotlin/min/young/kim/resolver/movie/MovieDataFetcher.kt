@@ -4,20 +4,17 @@ import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsQuery
 import com.netflix.graphql.dgs.InputArgument
 import min.young.kim.model.movie.Movie
+import min.young.kim.repository.movie.MovieRepository
 
 @DgsComponent
-class MovieDataFetcher {
-
-    private val movies = listOf(
-        Movie("1", "The Shawshank Redemption", 1994),
-        Movie("2", "The Godfather", 1972),
-        Movie("3", "The Dark Knight", 2008)
-    )
+class MovieDataFetcher(
+    private val movieRepository: MovieRepository,
+) {
 
     @DgsQuery
-    fun allMovies(): List<Movie>? = movies
+    fun allMovies(): List<Movie>? = movieRepository.findAll()
 
     @DgsQuery
-    fun movie(@InputArgument id: String): Movie? = movies.find { it.id == id }
+    fun movie(@InputArgument id: String): Movie? = movieRepository.findById(id).orElse(null)
 
 }

@@ -1,7 +1,12 @@
 package min.young.kim.model.movie
 
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+
+@Entity
 data class Movie(
+    @Id
     val id: String,
-    val title: String,
-    val releaseYear: Int,
+    var title: String,
+    var releaseYear: Int,
 )
