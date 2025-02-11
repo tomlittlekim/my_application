@@ -18,6 +18,6 @@ class MovieDataFetcher {
     fun allMovies(): List<Movie>? = movies
 
     @DgsQuery
-    fun movie(@InputArgument id: String): Movie? = movies.first { it.id == id }
+    fun movie(@InputArgument id: String): Movie? = movies.find { it.id == id }
 
 }
