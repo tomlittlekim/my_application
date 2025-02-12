@@ -1,10 +1,17 @@
 type Query {
     allMovies: [Movie!]
-    movie(id: ID!): Movie
+    movie(id: String!): Movie
+}
+
+type Mutation {
+    addMovie(id: String!, title: String!, releaseYear: Int!): Movie!
+    updateMovie(id: String!, title: String, releaseYear: Int, isUsable: Boolean!): Movie
+    deleteMovie(id: String!): Movie
+    realDeleteMovie(id: String!): Boolean!
 }
 
 type Movie {
-    id: ID!
+    id: String!
     title: String!
     releaseYear: Int!
 }

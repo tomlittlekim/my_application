@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: my_application
+
+  graphql:
+    schema:
+      location: classpath:graphql/
+    path: /graphql
+
+  datasource:
+    url: jdbc:h2:mem:moviesdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console

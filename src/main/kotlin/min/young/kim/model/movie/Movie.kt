@@ -9,4 +9,5 @@ data class Movie(
     val id: String,
     var title: String,
     var releaseYear: Int,
+    var isUsable: Boolean? = true,
 )
