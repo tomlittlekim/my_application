@@ -1,4 +1,4 @@
-import { renderAllMovies, renderMovieDetails } from './movie-fetch-rendering.js';
+import { renderAllMovies, renderMovieDetails, renderAddMovieForm } from './movie-fetch-rendering.js';
 
 export function router() {
   const hash = window.location.hash;
@@ -8,6 +8,8 @@ export function router() {
   } else if (hash.startsWith('#/movie/')) {
     const movieId = hash.split('/')[2];
     loadPage('/fragments/movie-details.html', (template) => renderMovieDetails(movieId, template));
+  } else if (hash === '#/add') {
+    loadPage('/fragments/add-movie.html', renderAddMovieForm);
   }
 }
 

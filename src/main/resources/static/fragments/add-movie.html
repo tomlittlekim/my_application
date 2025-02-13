@@ -1,0 +1,33 @@
+<h1 class="mb-4">Add Movie</h1>
+
+<div id="movieDetails" class="card p-3 mb-3">
+  <h5>ID: 자동 입력</h5>
+
+  <form id="addMovieForm" class="mt-3">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="releaseYear" class="form-label">Release Year</label>
+      <input
+          type="number"
+          class="form-control"
+          id="releaseYear"
+          name="releaseYear"
+          required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+  </form>
+</div>
+
+<a href="#/" class="btn btn-secondary">Back to All Movies</a>

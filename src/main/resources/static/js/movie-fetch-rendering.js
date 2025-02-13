@@ -1,4 +1,4 @@
-import { fetchMovies, fetchMovieDetails } from './movie-fetch.js';
+import { fetchMovies, fetchMovieDetails, addMovie } from './movie-fetch.js';
 
 export async function renderAllMovies(template) {
   const movies = await fetchMovies();
@@ -33,4 +33,25 @@ export async function renderMovieDetails(movieId, template) {
   `;
 
   document.getElementById('movieDetails').innerHTML = htmlForDetails;
+}
+
+export function renderAddMovieForm() {
+  const form = document.getElementById('addMovieForm');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const title = form.title.value.trim();
+    const releaseYear = form.releaseYear.value.trim();
+
+    try {
+      await addMovie(title, releaseYear);
+
+      alert('Added Movie!');
+      window.location.hash = '#/';
+    } catch (error) {
+      console.error(`Failed to add movie: ${error}`);
+      alert('Failed to add movie. Please try again');
+    }
+  });
 }
