@@ -6,7 +6,6 @@ import com.netflix.graphql.dgs.DgsQuery
 import com.netflix.graphql.dgs.InputArgument
 import min.young.kim.model.movie.Movie
 import min.young.kim.repository.movie.MovieRepository
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 
 @DgsComponent
 class MovieDataFetcher(
@@ -14,10 +13,10 @@ class MovieDataFetcher(
 ) {
 
     @DgsQuery
-    fun allMovies(): List<Movie>? = movieRepository.findAllByIsUsableTrue()
+    fun allMovies(): List<Movie>? = movieRepository.findAllByIsUsableTrueOrderByReleaseYearAsc()
 
     @DgsQuery
-    fun movie(@InputArgument id: String): Movie? = movieRepository.findByIdAndIsUsableTrue(id).orElse(null)
+    fun movie(@InputArgument id: String): Movie? = movieRepository.findById(id).orElse(null)
 
     @DgsMutation
     fun addMovie(@InputArgument title: String, @InputArgument releaseYear: Int): Movie {

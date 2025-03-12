@@ -1,15 +1,16 @@
-import { renderAllMovies, renderMovieDetails, renderAddMovieForm } from './movie-fetch-rendering.js';
+import {routes} from './routes.js';
 
 export function router() {
   const hash = window.location.hash;
+  // routes 배열에서 일치하는 route 찾기
+  const route = routes.find(r => hash.match(r.path));
 
-  if (hash === '' || hash === '#/') {
-    loadPage('/fragments/all-movies.html', renderAllMovies);
-  } else if (hash.startsWith('#/movie/')) {
-    const movieId = hash.split('/')[2];
-    loadPage('/fragments/movie-details.html', (template) => renderMovieDetails(movieId, template));
-  } else if (hash === '#/add') {
-    loadPage('/fragments/add-movie.html', renderAddMovieForm);
+  if (route) {
+    // 매칭되는 경로에서 캡쳐된 그룹 (정규식 매칭 결과)
+    const params = hash.match(route.path);
+    loadPage(route.fragment, (template) => route.callback(template, params));
+  } else {
+    console.error(`No route defined for ${hash}`);
   }
 }
 

@@ -1,6 +1,9 @@
 package min.young.kim.configuration
 
+import min.young.kim.model.common.Code
+import min.young.kim.model.common.CodeId
 import min.young.kim.model.movie.Movie
+import min.young.kim.repository.common.CommonRepository
 import min.young.kim.repository.movie.MovieRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
@@ -10,7 +13,7 @@ import org.springframework.context.annotation.Configuration
 class DataInitializer {
 
     @Bean
-    fun init(movieRepository: MovieRepository) = CommandLineRunner {
+    fun initMovies(movieRepository: MovieRepository) = CommandLineRunner {
         movieRepository.saveAll(
             listOf(
                 Movie("1", "The Shawshank Redemption", 1994),
@@ -19,4 +22,15 @@ class DataInitializer {
             )
         )
     }
+
+    @Bean
+    fun initCodes(commonRepository: CommonRepository) = CommandLineRunner {
+        commonRepository.saveAll(
+            listOf(
+                Code(CodeId("Y", "IS_USABLE"), "예"),
+                Code(CodeId("N", "IS_USABLE"), "아니오")
+            )
+        )
+    }
+
 }

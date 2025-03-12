@@ -1,0 +1,13 @@
+extend type Query {
+    codes(codeType: String!): [Code]
+}
+
+type Code {
+    id: CodeId!
+    displayValue: String!
+}
+
+type CodeId {
+    codeType: String!
+    code: String!
+}
