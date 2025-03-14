@@ -13,25 +13,19 @@ class MovieDataFetcher(
 ) {
 
     @DgsQuery
-    fun allMovies(@InputArgument includeHidden: Boolean = false): List<Movie>? =
-        if (includeHidden) {
-            movieRepository.findAllByOrderByReleaseYearAsc()
-        } else {
-            movieRepository.findAllByIsUsableTrueOrderByReleaseYearAsc()
-        }
-
-    @DgsQuery
-    fun searchMovies(
-        @InputArgument keyword: String,
+    fun movies(
+        @InputArgument keyword: String = "",
         @InputArgument startYear: Int? = null,
         @InputArgument endYear: Int? = null,
         @InputArgument includeHidden: Boolean = false
     ): List<Movie> {
-        // 빈 문자열 처리
-        val searchKeyword = keyword.trim()
-
-        // QueryDSL을 사용한 통합 검색 메서드 호출
-        return movieRepository.searchMoviesWithQueryDsl(searchKeyword, startYear, endYear, includeHidden)
+        // 기존 두 메서드를 통합한 하나의 메서드
+        return movieRepository.findMovies(
+            keyword = keyword.trim(),
+            startYear = startYear,
+            endYear = endYear,
+            includeHidden = includeHidden
+        )
     }
 
     @DgsQuery

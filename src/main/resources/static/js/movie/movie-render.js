@@ -16,7 +16,7 @@ let currentStartYear = '';
 let currentEndYear = '';
 
 export async function renderAllMovies(template) {
-  // includeHidden, searchKeyword, startYear, endYear 파라미터를 전달하여 영화 목록 가져오기
+  // 통합된 fetchMovies 함수 호출
   const movies = await fetchMovies(showHiddenMovies, currentSearchKeyword, currentStartYear, currentEndYear);
 
   // 반복해서 쓸 `<li>...</li>` 전용의 간단한 소규모 템플릿
@@ -65,7 +65,7 @@ export async function renderAllMovies(template) {
 
   // 영화가 없는 경우 메시지 표시
   if (movies.length === 0) {
-    if (currentSearchKeyword || currentReleaseYear) {
+    if (currentSearchKeyword || currentStartYear || currentEndYear) {
       movieList.innerHTML = '<li class="list-group-item text-center">검색 결과가 없습니다.</li>';
     } else {
       movieList.innerHTML = '<li class="list-group-item text-center">등록된 영화가 없습니다.</li>';

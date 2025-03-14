@@ -13,7 +13,7 @@ class MovieRepositoryCustomImpl(
 ) : MovieRepositoryCustom {
 
     @Transactional(readOnly = true)
-    override fun searchMoviesWithQueryDsl(
+    override fun findMovies(
         keyword: String,
         startYear: Int?,
         endYear: Int?,
@@ -22,7 +22,7 @@ class MovieRepositoryCustomImpl(
         val movie = QMovie.movie
         val predicates = BooleanBuilder()
 
-        // 검색어 조건
+        // 검색어 조건 (비어있지 않을 때만)
         if (keyword.isNotBlank()) {
             predicates.and(movie.title.containsIgnoreCase(keyword))
         }
@@ -47,5 +47,18 @@ class MovieRepositoryCustomImpl(
             .where(predicates)
             .orderBy(movie.releaseYear.asc())
             .fetch()
+    }
+
+    @Transactional(readOnly = true)
+    override fun findMaxId(): Int {
+        val movie = QMovie.movie
+
+        // ID 필드의 최대값 조회
+        val maxId = queryFactory
+            .select(movie.id.max())
+            .from(movie)
+            .fetchOne() ?: "0"
+
+        return maxId.toIntOrNull() ?: 0
     }
 }

@@ -12,14 +12,4 @@ interface MovieRepository : JpaRepository<Movie, String>, QuerydslPredicateExecu
 
     // 모든 영화 조회 (숨겨진 영화 포함)
     fun findAllByOrderByReleaseYearAsc(): List<Movie>?
-
-    // 기본 제목 검색 메서드 (백업용으로 유지)
-    fun findByTitleContainingIgnoreCaseAndIsUsableTrueOrderByReleaseYearAsc(keyword: String): List<Movie>?
-    fun findByTitleContainingIgnoreCaseOrderByReleaseYearAsc(keyword: String): List<Movie>?
-
-    @Query(value = """
-      select coalesce(max(cast(id as integer)), 0)
-      from movie
-    """, nativeQuery = true)
-    fun findMaxId(): Int
 }

@@ -22,7 +22,3 @@ spring:
     console:
       enabled: true
       path: /h2-console
-
-jwt:
-  secret: yeongmins-secret-key-that-is-at-least-256-bits-long
-  expiration: 3600 # 만료 시간 (초 단위, 예: 1시간)
