@@ -3,7 +3,7 @@ import {
   renderAllMovies,
   renderEditMovieForm,
   renderMovieDetails,
-  setupToggleButton
+  setupEventHandlers
 } from './movie/movie-render.js';
 
 export const routes = [
@@ -13,8 +13,8 @@ export const routes = [
     fragment: '/fragments/all-movies.html',
     callback: (template) => {
       renderAllMovies(template);
-      // 영화 목록 페이지에서 토글 버튼 설정
-      setupToggleButton();
+      // 모든 이벤트 핸들러 설정 (토글 버튼 + 검색 관련 이벤트)
+      setupEventHandlers();
     },
   },
   {

@@ -7,10 +7,15 @@ import {
 } from './movie-fetch.js';
 import {fetchCodes} from "../common/common-fetch.js";
 
+// 상태 변수 추가: 숨겨진 영화 표시 여부
 let showHiddenMovies = false;
+// 검색 키워드 상태 저장
+let currentSearchKeyword = '';
 
 export async function renderAllMovies(template) {
-  const movies = await fetchMovies(showHiddenMovies);
+  // includeHidden과 searchKeyword 파라미터를 전달하여 영화 목록 가져오기
+  const movies = await fetchMovies(showHiddenMovies, currentSearchKeyword);
+
   // 반복해서 쓸 `<li>...</li>` 전용의 간단한 소규모 템플릿
   const liTemplate = `
     <li class="list-group-item{{hiddenClass}}">
@@ -22,9 +27,28 @@ export async function renderAllMovies(template) {
   const movieList = document.getElementById('movieList');
   movieList.innerHTML = ''; // 혹시 남아있을지 모를 잔여물 초기화
 
-  movies.forEach((movie) => {
-    if (!showHiddenMovies && !movie.isUsable) { return; } // showHiddenMovies가 false이고 영화가 사용 불가능한 경우 건너뛰기
+  // 검색 결과 정보 표시 업데이트
+  const searchResultInfo = document.getElementById('searchResultInfo');
+  const searchKeywordSpan = document.getElementById('searchKeyword');
 
+  if (currentSearchKeyword) {
+    searchResultInfo.classList.remove('d-none');
+    searchKeywordSpan.textContent = currentSearchKeyword;
+  } else {
+    searchResultInfo.classList.add('d-none');
+  }
+
+  // 영화가 없는 경우 메시지 표시
+  if (movies.length === 0) {
+    if (currentSearchKeyword) {
+      movieList.innerHTML = '<li class="list-group-item text-center">검색 결과가 없습니다.</li>';
+    } else {
+      movieList.innerHTML = '<li class="list-group-item text-center">등록된 영화가 없습니다.</li>';
+    }
+    return;
+  }
+
+  movies.forEach((movie) => {
     // 사용 불가능한 영화에 대한 스타일과 텍스트 설정
     const hiddenClass = !movie.isUsable ? " text-muted" : "";
     const hiddenStyle = !movie.isUsable ? 'style="color: gray;"' : '';
@@ -48,8 +72,9 @@ export async function renderAllMovies(template) {
   }
 }
 
-// toggleHiddenMovies 버튼 이벤트 핸들러 설정 함수
-export function setupToggleButton() {
+// 버튼 이벤트 핸들러 설정 함수
+export function setupEventHandlers() {
+  // toggleHiddenMovies 버튼 이벤트 설정
   const toggleButton = document.getElementById('toggleHiddenMovies');
   if (toggleButton) {
     toggleButton.addEventListener('click', () => {
@@ -57,6 +82,49 @@ export function setupToggleButton() {
       showHiddenMovies = !showHiddenMovies;
       renderAllMovies();
     });
+  }
+
+  // 검색 버튼 이벤트 설정
+  const searchButton = document.getElementById('searchButton');
+  if (searchButton) {
+    searchButton.addEventListener('click', () => {
+      performSearch();
+    });
+  }
+
+  // 검색 입력 필드에서 Enter 키 이벤트 처리
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        performSearch();
+      }
+    });
+  }
+
+  // 검색 초기화 버튼 이벤트 설정
+  const clearSearchButton = document.getElementById('clearSearchButton');
+  if (clearSearchButton) {
+    clearSearchButton.addEventListener('click', () => {
+      // 검색어 초기화 및 입력 필드 비우기
+      currentSearchKeyword = '';
+      if (searchInput) {
+        searchInput.value = '';
+      }
+      // 영화 목록 다시 로드
+      renderAllMovies();
+    });
+  }
+}
+
+// 검색 실행 함수
+function performSearch() {
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    // 검색어 공백 제거 및 저장
+    currentSearchKeyword = searchInput.value.trim();
+    // 영화 목록 다시 로드
+    renderAllMovies();
   }
 }
 
@@ -67,6 +135,7 @@ export async function renderMovieDetails(movieId, template) {
     <h5>ID: ${movie.id}</h5>
     <p class="mb-2">Title: ${movie.title}</p>
     <p class="mb-0">Release Year: ${movie.releaseYear}</p>
+    <p class="mb-0">Status: ${movie.isUsable ? 'Active' : '<span class="text-muted">Hidden</span>'}</p>
   `;
 
   document.getElementById('movieDetails').innerHTML = htmlForDetails;

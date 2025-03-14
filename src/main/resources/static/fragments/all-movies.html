@@ -6,4 +6,19 @@
   </div>
 </div>
 
+<!-- 검색 기능 추가 -->
+<div class="mb-4">
+  <div class="input-group">
+    <input type="text" id="searchInput" class="form-control" placeholder="영화 제목 검색...">
+    <button class="btn btn-outline-secondary" type="button" id="searchButton">검색</button>
+    <button class="btn btn-outline-danger" type="button" id="clearSearchButton">초기화</button>
+  </div>
+  <div class="form-text">제목에 포함된 키워드로 검색됩니다.</div>
+</div>
+
+<!-- 검색 결과 표시 영역 -->
+<div id="searchResultInfo" class="alert alert-info d-none mb-3">
+  "<span id="searchKeyword"></span>"에 대한 검색 결과입니다.
+</div>
+
 <ul id="movieList" class="list-group"></ul>

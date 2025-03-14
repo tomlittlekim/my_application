@@ -13,11 +13,20 @@ class MovieDataFetcher(
 ) {
 
     @DgsQuery
-    fun allMovies(@InputArgument includeHidden: Boolean = false): List<Movie>? = if (includeHidden) {
-        movieRepository.findAllByOrderByReleaseYearAsc()
-    } else {
-        movieRepository.findAllByIsUsableTrueOrderByReleaseYearAsc()
-    }
+    fun allMovies(@InputArgument includeHidden: Boolean = false): List<Movie>? =
+        if (includeHidden) {
+            movieRepository.findAllByOrderByReleaseYearAsc()
+        } else {
+            movieRepository.findAllByIsUsableTrueOrderByReleaseYearAsc()
+        }
+
+    @DgsQuery
+    fun searchMovies(@InputArgument keyword: String, @InputArgument includeHidden: Boolean = false): List<Movie>? =
+        if (includeHidden) {
+            movieRepository.findByTitleContainingIgnoreCaseOrderByReleaseYearAsc(keyword)
+        } else {
+            movieRepository.findByTitleContainingIgnoreCaseAndIsUsableTrueOrderByReleaseYearAsc(keyword)
+        }
 
     @DgsQuery
     fun movie(@InputArgument id: String): Movie? = movieRepository.findById(id).orElse(null)
