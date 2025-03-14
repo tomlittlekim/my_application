@@ -11,10 +11,13 @@ import {fetchCodes} from "../common/common-fetch.js";
 let showHiddenMovies = false;
 // 검색 키워드 상태 저장
 let currentSearchKeyword = '';
+// 개봉년도 기간 검색 상태 저장
+let currentStartYear = '';
+let currentEndYear = '';
 
 export async function renderAllMovies(template) {
-  // includeHidden과 searchKeyword 파라미터를 전달하여 영화 목록 가져오기
-  const movies = await fetchMovies(showHiddenMovies, currentSearchKeyword);
+  // includeHidden, searchKeyword, startYear, endYear 파라미터를 전달하여 영화 목록 가져오기
+  const movies = await fetchMovies(showHiddenMovies, currentSearchKeyword, currentStartYear, currentEndYear);
 
   // 반복해서 쓸 `<li>...</li>` 전용의 간단한 소규모 템플릿
   const liTemplate = `
@@ -29,18 +32,40 @@ export async function renderAllMovies(template) {
 
   // 검색 결과 정보 표시 업데이트
   const searchResultInfo = document.getElementById('searchResultInfo');
-  const searchKeywordSpan = document.getElementById('searchKeyword');
 
-  if (currentSearchKeyword) {
+  // 검색 조건이 있는 경우 표시
+  if (currentSearchKeyword || currentStartYear || currentEndYear) {
     searchResultInfo.classList.remove('d-none');
-    searchKeywordSpan.textContent = currentSearchKeyword;
+
+    // 표시할 검색 조건 정보 설정
+    let searchInfoText = [];
+    if (currentSearchKeyword) {
+      searchInfoText.push(`제목: "${currentSearchKeyword}"`);
+    }
+
+    // 개봉년도 기간 정보 표시
+    if (currentStartYear || currentEndYear) {
+      let yearRangeText = '개봉년도: ';
+
+      if (currentStartYear && currentEndYear) {
+        yearRangeText += `${currentStartYear}년 ~ ${currentEndYear}년`;
+      } else if (currentStartYear) {
+        yearRangeText += `${currentStartYear}년 이후`;
+      } else if (currentEndYear) {
+        yearRangeText += `${currentEndYear}년 이전`;
+      }
+
+      searchInfoText.push(yearRangeText);
+    }
+
+    document.getElementById('searchCriteria').textContent = searchInfoText.join(', ');
   } else {
     searchResultInfo.classList.add('d-none');
   }
 
   // 영화가 없는 경우 메시지 표시
   if (movies.length === 0) {
-    if (currentSearchKeyword) {
+    if (currentSearchKeyword || currentReleaseYear) {
       movieList.innerHTML = '<li class="list-group-item text-center">검색 결과가 없습니다.</li>';
     } else {
       movieList.innerHTML = '<li class="list-group-item text-center">등록된 영화가 없습니다.</li>';
@@ -102,15 +127,47 @@ export function setupEventHandlers() {
     });
   }
 
+  // 시작 개봉년도 입력 필드에서 Enter 키 이벤트 처리
+  const startYearInput = document.getElementById('startYearInput');
+  if (startYearInput) {
+    startYearInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        performSearch();
+      }
+    });
+  }
+
+  // 종료 개봉년도 입력 필드에서 Enter 키 이벤트 처리
+  const endYearInput = document.getElementById('endYearInput');
+  if (endYearInput) {
+    endYearInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        performSearch();
+      }
+    });
+  }
+
   // 검색 초기화 버튼 이벤트 설정
   const clearSearchButton = document.getElementById('clearSearchButton');
   if (clearSearchButton) {
     clearSearchButton.addEventListener('click', () => {
-      // 검색어 초기화 및 입력 필드 비우기
+      // 검색어와 개봉년도 기간 초기화 및 입력 필드 비우기
       currentSearchKeyword = '';
+      currentStartYear = '';
+      currentEndYear = '';
+
       if (searchInput) {
         searchInput.value = '';
       }
+
+      if (startYearInput) {
+        startYearInput.value = '';
+      }
+
+      if (endYearInput) {
+        endYearInput.value = '';
+      }
+
       // 영화 목록 다시 로드
       renderAllMovies();
     });
@@ -120,12 +177,26 @@ export function setupEventHandlers() {
 // 검색 실행 함수
 function performSearch() {
   const searchInput = document.getElementById('searchInput');
+  const startYearInput = document.getElementById('startYearInput');
+  const endYearInput = document.getElementById('endYearInput');
+
   if (searchInput) {
     // 검색어 공백 제거 및 저장
     currentSearchKeyword = searchInput.value.trim();
-    // 영화 목록 다시 로드
-    renderAllMovies();
   }
+
+  if (startYearInput) {
+    // 시작 개봉년도 값 저장
+    currentStartYear = startYearInput.value.trim();
+  }
+
+  if (endYearInput) {
+    // 종료 개봉년도 값 저장
+    currentEndYear = endYearInput.value.trim();
+  }
+
+  // 영화 목록 다시 로드
+  renderAllMovies();
 }
 
 export async function renderMovieDetails(movieId, template) {

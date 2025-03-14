@@ -1,9 +1,16 @@
-export async function fetchMovies(includeHidden = false, searchKeyword = '') {
-  // 검색 키워드가 있는 경우 searchMovies 쿼리를 사용하고, 없는 경우 allMovies 쿼리를 사용
-  const query = searchKeyword
+export async function fetchMovies(includeHidden = false, searchKeyword = '', startYear = '', endYear = '') {
+  // 검색 키워드나 개봉년도 기간이 있는 경우 searchMovies 쿼리를 사용하고, 없는 경우 allMovies 쿼리를 사용
+  const hasSearchCriteria = searchKeyword || startYear || endYear;
+
+  const query = hasSearchCriteria
       ? `
     query {
-      searchMovies(keyword: "${searchKeyword}", includeHidden: ${includeHidden}) {
+      searchMovies(
+        keyword: "${searchKeyword}", 
+        startYear: ${startYear || 'null'}, 
+        endYear: ${endYear || 'null'}, 
+        includeHidden: ${includeHidden}
+      ) {
         id
         title
         releaseYear
@@ -33,7 +40,7 @@ export async function fetchMovies(includeHidden = false, searchKeyword = '') {
     }
     const result = await response.json();
     // 쿼리에 따라 결과 필드 이름이 다름
-    return searchKeyword ? result.data.searchMovies : result.data.allMovies;
+    return hasSearchCriteria ? result.data.searchMovies : result.data.allMovies;
   } catch (error) {
     console.error(`Failed to fetch movies: ${error}`);
     alert(`Failed to fetch movies. Please try again later.`);

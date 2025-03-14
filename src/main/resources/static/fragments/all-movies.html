@@ -8,17 +8,33 @@
 
 <!-- 검색 기능 추가 -->
 <div class="mb-4">
-  <div class="input-group">
-    <input type="text" id="searchInput" class="form-control" placeholder="영화 제목 검색...">
-    <button class="btn btn-outline-secondary" type="button" id="searchButton">검색</button>
-    <button class="btn btn-outline-danger" type="button" id="clearSearchButton">초기화</button>
+  <div class="row g-2">
+    <div class="col-md-6">
+      <label for="searchInput" class="form-label">영화 제목</label>
+      <input type="text" id="searchInput" class="form-control" placeholder="영화 제목 검색...">
+      <div class="form-text">제목에 포함된 키워드로 검색됩니다.</div>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">개봉년도 기간</label>
+      <div class="input-group">
+        <input type="number" id="startYearInput" class="form-control" placeholder="시작년도" min="1900" max="2100">
+        <span class="input-group-text">~</span>
+        <input type="number" id="endYearInput" class="form-control" placeholder="종료년도" min="1900" max="2100">
+      </div>
+      <div class="form-text">시작년도와 종료년도 범위 내 개봉 영화를 검색합니다.</div>
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+      <div class="d-grid gap-2 w-100">
+        <button class="btn btn-outline-primary" type="button" id="searchButton">검색</button>
+        <button class="btn btn-outline-danger" type="button" id="clearSearchButton">초기화</button>
+      </div>
+    </div>
   </div>
-  <div class="form-text">제목에 포함된 키워드로 검색됩니다.</div>
 </div>
 
 <!-- 검색 결과 표시 영역 -->
 <div id="searchResultInfo" class="alert alert-info d-none mb-3">
-  "<span id="searchKeyword"></span>"에 대한 검색 결과입니다.
+  <span id="searchCriteria"></span>에 대한 검색 결과입니다.
 </div>
 
 <ul id="movieList" class="list-group"></ul>

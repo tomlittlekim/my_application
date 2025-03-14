@@ -21,12 +21,18 @@ class MovieDataFetcher(
         }
 
     @DgsQuery
-    fun searchMovies(@InputArgument keyword: String, @InputArgument includeHidden: Boolean = false): List<Movie>? =
-        if (includeHidden) {
-            movieRepository.findByTitleContainingIgnoreCaseOrderByReleaseYearAsc(keyword)
-        } else {
-            movieRepository.findByTitleContainingIgnoreCaseAndIsUsableTrueOrderByReleaseYearAsc(keyword)
-        }
+    fun searchMovies(
+        @InputArgument keyword: String,
+        @InputArgument startYear: Int? = null,
+        @InputArgument endYear: Int? = null,
+        @InputArgument includeHidden: Boolean = false
+    ): List<Movie>? {
+        // 빈 문자열 처리
+        val searchKeyword = keyword.trim()
+
+        // 단일 쿼리로 모든 케이스 처리
+        return movieRepository.searchMovies(searchKeyword, startYear, endYear, includeHidden)
+    }
 
     @DgsQuery
     fun movie(@InputArgument id: String): Movie? = movieRepository.findById(id).orElse(null)
@@ -65,5 +71,4 @@ class MovieDataFetcher(
         }
         return false
     }
-
 }
