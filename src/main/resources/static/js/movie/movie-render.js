@@ -2,16 +2,19 @@ import {
   addMovie,
   fetchMovieDetails,
   fetchMovies,
-  updateMovie
+  updateMovie,
+  deleteMovie,
 } from './movie-fetch.js';
 import {fetchCodes} from "../common/common-fetch.js";
 
+let showHiddenMovies = false;
+
 export async function renderAllMovies(template) {
-  const movies = await fetchMovies();
+  const movies = await fetchMovies(showHiddenMovies);
   // 반복해서 쓸 `<li>...</li>` 전용의 간단한 소규모 템플릿
   const liTemplate = `
-    <li class="list-group-item">
-      <a href="#/movie/{{id}}">{{title}}</a> ({{releaseYear}})
+    <li class="list-group-item{{hiddenClass}}">
+      <a href="#/movie/{{id}}" {{hiddenStyle}}>{{title}}</a> ({{releaseYear}}){{hiddenText}}
     </li>
   `;
 
@@ -20,13 +23,41 @@ export async function renderAllMovies(template) {
   movieList.innerHTML = ''; // 혹시 남아있을지 모를 잔여물 초기화
 
   movies.forEach((movie) => {
+    if (!showHiddenMovies && !movie.isUsable) { return; } // showHiddenMovies가 false이고 영화가 사용 불가능한 경우 건너뛰기
+
+    // 사용 불가능한 영화에 대한 스타일과 텍스트 설정
+    const hiddenClass = !movie.isUsable ? " text-muted" : "";
+    const hiddenStyle = !movie.isUsable ? 'style="color: gray;"' : '';
+    const hiddenText = !movie.isUsable ? ' (사용 안 함)' : '';
+
     const itemHtml = liTemplate
     .replace('{{id}}', movie.id)
     .replace('{{title}}', movie.title)
-    .replace('{{releaseYear}}', movie.releaseYear);
+    .replace('{{releaseYear}}', movie.releaseYear)
+    .replace('{{hiddenClass}}', hiddenClass)
+    .replace('{{hiddenStyle}}', hiddenStyle)
+    .replace('{{hiddenText}}', hiddenText);
 
     movieList.innerHTML += itemHtml;
   });
+
+  // 버튼 텍스트 업데이트
+  const toggleButton = document.getElementById('toggleHiddenMovies');
+  if (toggleButton) {
+    toggleButton.textContent = showHiddenMovies ? 'Hide Hidden Movies' : 'View Hidden Movies';
+  }
+}
+
+// toggleHiddenMovies 버튼 이벤트 핸들러 설정 함수
+export function setupToggleButton() {
+  const toggleButton = document.getElementById('toggleHiddenMovies');
+  if (toggleButton) {
+    toggleButton.addEventListener('click', () => {
+      // 토글 상태를 반전시키고 영화 목록을 다시 렌더링
+      showHiddenMovies = !showHiddenMovies;
+      renderAllMovies();
+    });
+  }
 }
 
 export async function renderMovieDetails(movieId, template) {
@@ -103,6 +134,14 @@ export async function renderEditMovieForm(id) {
     } catch (error) {
       console.error(`Failed to update movie: ${error}`);
       alert('Failed to update movie. Please try again');
+    }
+  });
+
+  document.getElementById('deleteMovieButton').addEventListener('click', function() {
+    // 영화 ID는 페이지 내 적절한 방법(예: input 태그의 value)으로 가져옵니다.
+    const movieId = document.getElementById('movieId').value;
+    if (confirm("정말 삭제하시겠습니까?")) {
+      deleteMovie(movieId);
     }
   });
 }

@@ -1,7 +1,7 @@
-export async function fetchMovies() {
+export async function fetchMovies(includeHidden = false) {
   const query = `
     query {
-      allMovies {
+      allMovies(includeHidden: ${includeHidden}) {
         id
         title
         releaseYear
@@ -105,4 +105,28 @@ export async function updateMovie(id, title, releaseYear, isUsable) {
     console.error(`Failed to update movie: ${error}`);
     throw error;
   }
+}
+
+export async function deleteMovie(id) {
+  const mutation = `
+    mutation {
+      realDeleteMovie(id: "${id}")
+    }
+  `
+  fetch('/graphql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.data.realDeleteMovie) {
+      alert("영화가 삭제되었습니다.");
+      // 삭제 후 영화 목록 페이지로 이동하는 등 추가 처리를 할 수 있습니다.
+      window.location.href = '/';
+    } else {
+      alert("영화 삭제에 실패했습니다.");
+    }
+  })
+  .catch(error => console.error("Error deleting movie: ", error));
 }

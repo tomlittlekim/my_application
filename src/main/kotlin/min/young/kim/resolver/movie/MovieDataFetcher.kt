@@ -13,7 +13,11 @@ class MovieDataFetcher(
 ) {
 
     @DgsQuery
-    fun allMovies(): List<Movie>? = movieRepository.findAllByIsUsableTrueOrderByReleaseYearAsc()
+    fun allMovies(@InputArgument includeHidden: Boolean = false): List<Movie>? = if (includeHidden) {
+        movieRepository.findAllByOrderByReleaseYearAsc()
+    } else {
+        movieRepository.findAllByIsUsableTrueOrderByReleaseYearAsc()
+    }
 
     @DgsQuery
     fun movie(@InputArgument id: String): Movie? = movieRepository.findById(id).orElse(null)

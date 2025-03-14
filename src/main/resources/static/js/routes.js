@@ -2,7 +2,8 @@ import {
   renderAddMovieForm,
   renderAllMovies,
   renderEditMovieForm,
-  renderMovieDetails
+  renderMovieDetails,
+  setupToggleButton
 } from './movie/movie-render.js';
 
 export const routes = [
@@ -10,7 +11,11 @@ export const routes = [
   {
     path: /^(?:#?\/?)$/,
     fragment: '/fragments/all-movies.html',
-    callback: renderAllMovies,
+    callback: (template) => {
+      renderAllMovies(template);
+      // 영화 목록 페이지에서 토글 버튼 설정
+      setupToggleButton();
+    },
   },
   {
     path: /^#\/movie\/(.*)$/, // '#/movie/:id'

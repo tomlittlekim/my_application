@@ -1,5 +1,5 @@
 type Query {
-    allMovies: [Movie!]
+    allMovies(includeHidden: Boolean): [Movie!]
     movie(id: String!): Movie
 }
 
