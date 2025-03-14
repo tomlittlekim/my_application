@@ -26,12 +26,12 @@ class MovieDataFetcher(
         @InputArgument startYear: Int? = null,
         @InputArgument endYear: Int? = null,
         @InputArgument includeHidden: Boolean = false
-    ): List<Movie>? {
+    ): List<Movie> {
         // 빈 문자열 처리
         val searchKeyword = keyword.trim()
 
-        // 단일 쿼리로 모든 케이스 처리
-        return movieRepository.searchMovies(searchKeyword, startYear, endYear, includeHidden)
+        // QueryDSL을 사용한 통합 검색 메서드 호출
+        return movieRepository.searchMoviesWithQueryDsl(searchKeyword, startYear, endYear, includeHidden)
     }
 
     @DgsQuery
