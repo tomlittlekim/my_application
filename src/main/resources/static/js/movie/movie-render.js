@@ -1,9 +1,9 @@
 import {
   addMovie,
+  deleteMovie,
   fetchMovieDetails,
   fetchMovies,
   updateMovie,
-  deleteMovie,
 } from './movie-fetch.js';
 import {fetchCodes} from "../common/common-fetch.js";
 

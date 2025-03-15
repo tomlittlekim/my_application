@@ -1,0 +1,16 @@
+type UserActivity {
+    id: String!
+    activityType: String!
+    detail: String
+    timestamp: String!
+}
+
+extend type Query {
+    # 자신의 활동 이력 조회
+    userActivities(limit: Int): [UserActivity!]
+}
+
+extend type Mutation {
+    # 활동 내역 삭제 (관리자 기능)
+    clearUserActivities: Boolean
+}

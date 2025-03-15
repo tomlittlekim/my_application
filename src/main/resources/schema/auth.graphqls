@@ -1,0 +1,66 @@
+extend type Query {
+    # 현재 인증된 사용자 조회
+    currentUser: User
+    # 관리자 전용: 모든 사용자 조회
+    allUsers: [User!]
+}
+
+extend type Mutation {
+    # 로그인 뮤테이션
+    login(username: String!, password: String!): AuthResponse!
+
+    # 회원가입 뮤테이션
+    register(username: String!, email: String!, password: String!): RegisterResponse!
+
+    # 로그아웃 뮤테이션 (토큰 블랙리스트에 추가하는 등의 서버 측 작업을 위해)
+    logout: LogoutResponse!
+
+    # 비밀번호 변경
+    changePassword(oldPassword: String!, newPassword: String!): ChangePasswordResponse!
+
+    # 사용자 정보 업데이트
+    updateUser(email: String): UserUpdateResponse!
+}
+
+# 사용자 정보 타입
+type User {
+    id: String!
+    username: String!
+    email: String!
+    role: String!
+    createdAt: String!
+}
+
+# 로그인 응답 타입
+type AuthResponse {
+    success: Boolean!
+    token: String
+    message: String
+    user: User
+}
+
+# 회원가입 응답 타입
+type RegisterResponse {
+    success: Boolean!
+    message: String
+    user: User
+}
+
+# 로그아웃 응답 타입
+type LogoutResponse {
+    success: Boolean!
+    message: String
+}
+
+# 비밀번호 변경 응답 타입
+type ChangePasswordResponse {
+    success: Boolean!
+    message: String
+}
+
+# 사용자 정보 업데이트 응답 타입
+type UserUpdateResponse {
+    success: Boolean!
+    message: String
+    user: User
+}

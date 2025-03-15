@@ -2,7 +2,6 @@ package min.young.kim.repository.movie
 
 import min.young.kim.model.movie.Movie
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
 import org.springframework.data.querydsl.QuerydslPredicateExecutor
 
 // QuerydslPredicateExecutor를 추가로 상속

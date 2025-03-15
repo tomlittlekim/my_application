@@ -22,3 +22,13 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+  # Spring Security 설정
+  security:
+    filter:
+      order: 10
+
+# JWT 설정
+jwt:
+  secret: your_jwt_super_secret_key_should_be_at_least_32_characters_long
+  expiration: 86400000  # 24시간 (밀리초 단위)

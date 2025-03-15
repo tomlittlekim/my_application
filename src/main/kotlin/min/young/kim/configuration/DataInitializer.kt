@@ -3,11 +3,15 @@ package min.young.kim.configuration
 import min.young.kim.model.common.Code
 import min.young.kim.model.common.CodeId
 import min.young.kim.model.movie.Movie
+import min.young.kim.model.user.User
+import min.young.kim.model.user.UserRole
 import min.young.kim.repository.common.CommonRepository
 import min.young.kim.repository.movie.MovieRepository
+import min.young.kim.repository.user.UserRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 class DataInitializer {
@@ -33,4 +37,30 @@ class DataInitializer {
         )
     }
 
+    @Bean
+    fun initUsers(userRepository: UserRepository, passwordEncoder: PasswordEncoder) = CommandLineRunner {
+        // 기본 관리자 계정 생성
+        if (!userRepository.existsByUsername("admin")) {
+            userRepository.save(
+                User(
+                    username = "admin",
+                    email = "admin@example.com",
+                    password = passwordEncoder.encode("admin1234"),
+                    role = UserRole.ADMIN
+                )
+            )
+        }
+
+        // 기본 사용자 계정 생성
+        if (!userRepository.existsByUsername("user")) {
+            userRepository.save(
+                User(
+                    username = "user",
+                    email = "user@example.com",
+                    password = passwordEncoder.encode("user1234"),
+                    role = UserRole.USER
+                )
+            )
+        }
+    }
 }

@@ -1,0 +1,79 @@
+/* 공통 스타일 */
+body {
+  font-family: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* 로딩 애니메이션 */
+.loading-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 0.2em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border .75s linear infinite;
+}
+
+/* 로그인 폼 스타일 */
+.auth-form-container {
+  max-width: 400px;
+  margin: 100px auto;
+}
+
+/* 헤더 사용자 정보 스타일 */
+.user-info-dropdown {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 버튼 여백 */
+.btn + .btn {
+  margin-left: 0.5rem;
+}
+
+/* 카드 스타일 */
+.card {
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 0.75rem 1.25rem;
+}
+
+/* 테이블 스타일 */
+.table th {
+  font-weight: 600;
+}
+
+/* 활성/비활성 상태 표시 */
+.status-active {
+  color: #198754;
+}
+
+.status-inactive {
+  color: #dc3545;
+}
+
+/* 프로필 페이지 스타일 */
+.profile-section {
+  margin-bottom: 2rem;
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+}

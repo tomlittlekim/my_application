@@ -1,0 +1,45 @@
+<header class="mb-4">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">영화 관리 시스템</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <!-- 메뉴 항목들 -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/">영화 목록</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#/add">영화 등록</a>
+          </li>
+          <li class="nav-item admin-only d-none">
+            <a class="nav-link" href="#/admin">관리자 메뉴</a>
+          </li>
+        </ul>
+
+        <!-- 로그인 상태 표시 -->
+        <div class="d-flex align-items-center">
+          <div id="userInfo" class="text-white me-3 d-none">
+            <span id="usernameDisplay"></span>
+          </div>
+          <div class="dropdown">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+              <li id="loginMenuItem"><a class="dropdown-item" href="/fragments/auth/login.html">로그인</a></li>
+              <li id="registerMenuItem"><a class="dropdown-item" href="/fragments/auth/register.html">회원가입</a></li>
+              <li id="profileMenuItem" class="d-none"><a class="dropdown-item" href="#/profile">내 프로필</a></li>
+              <li id="logoutDivider" class="d-none"><hr class="dropdown-divider"></li>
+              <li id="logoutMenuItem" class="d-none"><a class="dropdown-item" href="#" id="logoutButton">로그아웃</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
